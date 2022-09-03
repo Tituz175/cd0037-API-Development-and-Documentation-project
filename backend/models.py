@@ -8,11 +8,6 @@ database_path = "postgresql://{}:{}@{}/{}".format(
     "postgres", "12345", "localhost:5432", database_name
 )
 
-# database_name = "bookshelf"
-# database_path = "postgresql://{}:{}@{}/{}".format(
-#     "postgres", "12345", "localhost:5432", database_name
-# )
-
 
 db = SQLAlchemy()
 
