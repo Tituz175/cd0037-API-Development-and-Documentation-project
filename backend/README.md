@@ -81,7 +81,7 @@ You will need to provide detailed documentation of your API endpoints including 
 - Request Arguments: None
 
 * Response
-- Status code: 200
+* Status code: 200
 - Returns: An object with a single key, categories, that contains an object of id: category_string in key:value pairs.
 
 Example:
@@ -103,7 +103,7 @@ Example:
 - Request Arguments: `page` - integer
 
 * Response:
-- status: 200
+* status: 200
 - Returns: An object with 10 questions a page, total questions-int, object including all categories, and current category for each question-string.
 
 ## Testing
