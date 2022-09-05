@@ -76,35 +76,410 @@ You will need to provide detailed documentation of your API endpoints including 
 `GET '/categories'`
 `curl -X GET http://127.0.0.1:5000/categories`
 
-* General
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- General
+
+* Fetches a dictionary which either contains
+* on success :
+
+  - the category dictionary which contain id and type in key and value pair.
+  - the success which is True
+  - and the status code of 200
+
+  # Success Example
+
+  ```json
+  {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  }
+  ```
+
+  - on failure :
+
+    - the success set to False.
+    - the error code of 404.
+    - message which is resource not found
+
+    # Failure Example
+
+    ```json
+      {
+        "success": False,
+        "error code": 404,
+        "message": " resource not found"
+      }
+    ```
+
 - Request Arguments: None
-
-* Response
-* Status code: 200
-- Returns: An object with a single key, categories, that contains an object of id: category_string in key:value pairs.
-
-Example:
-```json
-{
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
-}
-```
 
 `GET /questions`
 `curl -X GET http://127.0.0.1:5000/questions?page=1`
-* General:
-- Fetches a paginated set (maximum of 10) of questions, a total number of questions, all categories and current category string.
-- Request Arguments: `page` - integer
 
-* Response:
-* status: 200
-- Returns: An object with 10 questions a page, total questions-int, object including all categories, and current category for each question-string.
+- General:
+
+* Fetches a paginated set (maximum of 10) of questions, a total number of questions, all categories and current category string.
+* Request Arguments: `page` - integer
+
+- Response:
+- Status: 200
+
+* Returns:
+
+  - On success
+    An object with 10 questions a page, total questions-int, object including all categories, and current category for each question-string.
+
+    # Success Example
+
+    ```json
+    {
+      "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+      },
+      "questions": [
+        {
+          "answer": "Apollo 13",
+          "category": 5,
+          "difficulty": 4,
+          "id": 2,
+          "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+          "answer": "Tom Cruise",
+          "category": 5,
+          "difficulty": 4,
+          "id": 4,
+          "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+          "answer": "Maya Angelou",
+          "category": 4,
+          "difficulty": 2,
+          "id": 5,
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+          "answer": "Edward Scissorhands",
+          "category": 5,
+          "difficulty": 3,
+          "id": 6,
+          "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+          "answer": "Muhammad Ali",
+          "category": 4,
+          "difficulty": 1,
+          "id": 9,
+          "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+          "answer": "Brazil",
+          "category": 6,
+          "difficulty": 3,
+          "id": 10,
+          "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+          "answer": "Uruguay",
+          "category": 6,
+          "difficulty": 4,
+          "id": 11,
+          "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+          "answer": "George Washington Carver",
+          "category": 4,
+          "difficulty": 2,
+          "id": 12,
+          "question": "Who invented Peanut Butter?"
+        },
+        {
+          "answer": "Lake Victoria",
+          "category": 3,
+          "difficulty": 2,
+          "id": 13,
+          "question": "What is the largest lake in Africa?"
+        },
+        {
+          "answer": "The Palace of Versailles",
+          "category": 3,
+          "difficulty": 3,
+          "id": 14,
+          "question": "In which royal palace would you find the Hall of Mirrors?"
+        }
+      ],
+      "success": true,
+      "total_questions": 20
+    }
+    ```
+
+  - On failure:
+
+    - the success set to False.
+    - the error code of 404.
+    - message which is resource not found
+
+    # Failure Example
+
+    ```json
+      {
+        "success": False,
+        "error code": 404,
+        "message": " resource not found"
+      }
+    ```
+
+  `POST /questions`
+  `curl -X POST http://127.0.0.1:5000/questions -H "Content-Type: application/json" -d '{"question":"When was REACT first released", "answer":"look up in Google", "difficulty":"1", "category":"1"}'`
+
+  - General
+    - This create a question in the database with the JSON body attached to the endpoint
+
+  * Request arguements: `question`, `answer` - string, `difficulty`, `category` - integer
+
+  - Response:
+
+    - On success:
+      An object is returned, example below
+
+      # Success Example
+
+      ```json
+      {
+        "success": True,
+        "created": question.id,
+        "questions": current_questions,
+        "total_questions": len(Question.query.all())
+      }
+      ```
+
+    - On failure:
+      An object is returned, example below
+      # Failure Example
+      ```json
+      {
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+      }
+      ```
+
+  `GET /categories/${id}/questions`
+  `curl -X GET http://127.0.0.1:5000/categories/1/questions`
+
+  - General:
+    - Fetches questions for a cateogry specified by id request argument
+
+  * Request Arguments: category `id` - integer
+
+  * Response:
+
+    - On success:
+      An object is returned, example below
+
+      # Success Example
+
+      ```json
+      {
+        "current_category": "Science",
+        "questions": [
+          {
+            "answer": "The Liver",
+            "category": 1,
+            "difficulty": 4,
+            "id": 20,
+            "question": "What is the heaviest organ in the human body?"
+          },
+          {
+            "answer": "Alexander Fleming",
+            "category": 1,
+            "difficulty": 3,
+            "id": 21,
+            "question": "Who discovered penicillin?"
+          },
+          {
+            "answer": "Blood",
+            "category": 1,
+            "difficulty": 4,
+            "id": 22,
+            "question": "Hematology is a branch of medicine involving the study of what?"
+          },
+          {
+            "answer": "look up in Google",
+            "category": 1,
+            "difficulty": 1,
+            "id": 24,
+            "question": "When was REACT first released"
+          }
+        ],
+        "success": true,
+        "total_questions": 4
+      }
+      ```
+
+    - On failure:
+      An object is returned, example below
+
+      # Failure Example
+
+      ```json
+      {
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+      }
+      ```
+
+  `DELETE '/questions/${id}'`
+  `curl -X DELETE http://127.0.0.1:5000/questions/27`
+
+  - General:
+
+    - Deletes a specified question using the id of the question
+
+  - Request Arguments: `id` - integer
+  - Response:
+
+    - On success:
+      An object is returned, example below
+
+      # Success Example
+
+      ```json
+      {
+        "success": True,
+        "deleted": question_id,
+        "questions": current_questions,
+        "total_questions": len(Question.query.all())
+      }
+      ```
+
+    - On failure:
+      An object is returned, example below
+
+      # Failure Example
+
+      ```json
+      {
+        "success": True,
+        "deleted": question_id,
+        "questions": current_questions,
+        "total_questions": len(Question.query.all())
+      }
+      ```
+
+  `POST '/quizzes'`
+  `curl -X POST http://127.0.0.1:5000/quizzes -H "Content-Type: application/json" -d '{"quiz_category": {"id":"1"}, "previous_questions": []}'`
+
+  - General:
+
+    - Sends a post request in order to get the next question
+    - Request Body: args - quiz_category-`id` integer, or string, `previous_questions`- list. Below is a example of the request body.
+
+    ```json
+    {
+      "quiz_category": { "id": "1" },
+      "previous_questions": []
+    }
+    ```
+
+  - Response:
+
+    - On success:
+      An object is returned, example below
+
+      # Success Example
+
+      ```json
+      {
+        "question": {
+          "answer": "Blood",
+          "category": 1,
+          "difficulty": 4,
+          "id": 22,
+          "question": "Hematology is a branch of medicine involving the study of what?"
+        },
+        "success": true
+      }
+      ```
+
+    - On failure:
+
+      - the success set to False.
+      - the error code of 404.
+      - message which is resource not found
+
+      # Failure Example
+
+      ```json
+        {
+          "success": False,
+          "error code": 404,
+          "message": " resource not found"
+        }
+      ```
+
+  `POST '/questions/search'`
+  `curl -X POST http://127.0.0.1:5000/questions/search -H "Content-Type: application/json" -d '{"searchTerm": "title"}'`
+
+  - General:
+    - Sends a post request in order to search for a specific question by search term: `searchTerm` - string
+
+  * Request Body:
+
+  ```json
+  {
+    "searchTerm": "title"
+  }
+  ```
+
+  - Response:
+
+    - On success:
+      An object is returned, example below
+
+      # Success Example
+
+      ```json
+      {
+        "questions": [
+          {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+          },
+          {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+          }
+        ],
+        "success": true,
+        "total_questions": 2
+      }
+      ```
+
+      # Failure Example
+
+      ```json
+        {
+          "success": False,
+          "error code": 404,
+          "message": " resource not found"
+        }
+      ```
 
 ## Testing
 
