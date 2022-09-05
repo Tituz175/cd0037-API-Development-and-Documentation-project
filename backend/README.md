@@ -73,12 +73,18 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ### Documentation Example
 
-`GET '/api/v1.0/categories'`
+`GET '/categories'`
+`curl -X GET http://127.0.0.1:5000/categories`
 
+* General
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
 
+* Response
+- Status code: 200
+- Returns: An object with a single key, categories, that contains an object of id: category_string in key:value pairs.
+
+Example:
 ```json
 {
   "1": "Science",
@@ -89,6 +95,16 @@ You will need to provide detailed documentation of your API endpoints including 
   "6": "Sports"
 }
 ```
+
+`GET /questions`
+`curl -X GET http://127.0.0.1:5000/questions?page=1`
+* General:
+- Fetches a paginated set (maximum of 10) of questions, a total number of questions, all categories and current category string.
+- Request Arguments: `page` - integer
+
+* Response:
+- status: 200
+- Returns: An object with 10 questions a page, total questions-int, object including all categories, and current category for each question-string.
 
 ## Testing
 
